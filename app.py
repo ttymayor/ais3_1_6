@@ -4,7 +4,7 @@ import re
 import sqlite3
 
 import psutil
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, redirect, render_template, request, session, url_for
 
 app = Flask(__name__)
 app.secret_key = "monitoring-system-dev-key"
@@ -62,10 +62,38 @@ def init_db():
         )
     # 種子監控人物（身分證 -> 監控畫面）
     demo_persons = [
-        ("A118153566", "張三", "A118153566.jpg", "CAM-01 ｜ 大門口", "一樓大廳入口", "20260919_15:30:52"),
-        ("B223456789", "陳小美", "B223456789.jpg", "CAM-02 ｜ 電梯口", "東側電梯前", "20260919_15:28:10"),
-        ("C123456789", "李大明", "C123456789.jpg", "CAM-03 ｜ 停車場", "地下停車場 B2", "20260919_15:25:44"),
-        ("D123456789", "王阿豪", "D123456789.jpg", "CAM-04 ｜ 走道", "三樓走道", "20260919_15:22:07"),
+        (
+            "A118153566",
+            "威利",
+            "A118153566.jpg",
+            "CAM-01 ｜ 大門口",
+            "一樓大廳入口",
+            "20260919_15:30:52",
+        ),
+        (
+            "B223456789",
+            "陳小美",
+            "B223456789.jpg",
+            "CAM-02 ｜ 電梯口",
+            "東側電梯前",
+            "20260919_15:28:10",
+        ),
+        (
+            "C123456789",
+            "李大明",
+            "C123456789.jpg",
+            "CAM-03 ｜ 停車場",
+            "地下停車場 B2",
+            "20260919_15:25:44",
+        ),
+        (
+            "D123456789",
+            "王阿豪",
+            "D123456789.jpg",
+            "CAM-04 ｜ 走道",
+            "三樓走道",
+            "20260919_15:22:07",
+        ),
     ]
     for p in demo_persons:
         conn.execute(
@@ -96,9 +124,8 @@ def login():
         password = request.form["password"]
         ip = request.remote_addr or "unknown"
 
-        query = (
-            "SELECT * FROM users WHERE username = '{}' "
-            "AND password = '{}'".format(username, password)
+        query = "SELECT * FROM users WHERE username = '{}' AND password = '{}'".format(
+            username, password
         )
         executed_query = query
 
@@ -145,9 +172,11 @@ def dashboard():
     search_term = (request.args.get("id") or "").strip()
     if search_term:
         searched = search_term
-        row = get_db().execute(
-            "SELECT * FROM persons WHERE id_number = ?", (search_term,)
-        ).fetchone()
+        row = (
+            get_db()
+            .execute("SELECT * FROM persons WHERE id_number = ?", (search_term,))
+            .fetchone()
+        )
         if row:
             result = dict(row)
     return render_template(
