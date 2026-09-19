@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登入 - 監控系統</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #e6edf3;
+        }
+        .login-card {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 40px 36px;
+            width: 380px;
+            box-shadow: 0 15px 40px rgba(0,0,0,.45);
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .logo .icon { font-size: 42px; }
+        .logo h1 { font-size: 22px; margin-top: 8px; font-weight: 700; }
+        .logo p { font-size: 13px; color: #8b949e; margin-top: 4px; }
+        form { display: flex; flex-direction: column; gap: 16px; }
+        label { font-size: 14px; font-weight: 500; color: #c9d1d9; }
+        input[type="text"], input[type="password"] {
+            margin-top: 6px;
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+            background: #0d1117;
+            color: #e6edf3;
+            font-size: 15px;
+            font-family: inherit;
+            outline: none;
+        }
+        input:focus { border-color: #58a6ff; }
+        button {
+            margin-top: 6px;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #238636;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background .2s;
+        }
+        button:hover { background: #2ea043; }
+        .error {
+            background: #ffd7d7;
+            color: #a40e26;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            border: 1px solid #f85149;
+        }
+        .footer-hint {
+            margin-top: 18px;
+            padding-top: 14px;
+            border-top: 1px solid #21262d;
+            font-size: 12px;
+            color: #8b949e;
+            text-align: center;
+            line-height: 1.8;
+        }
+        .footer-hint code {
+            color: #79c0ff;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="logo">
+            <div class="icon">&#128200;</div>
+            <h1>監控系統</h1>
+            <p>System Monitoring Console</p>
+        </div>
+
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+
+        <form method="POST" action="/login">
+            <div>
+                <label for="username">帳號</label>
+                <input type="text" id="username" name="username" placeholder="請輸入帳號" autocomplete="off" required autofocus>
+            </div>
+            <div>
+                <label for="password">密碼</label>
+                <input type="password" id="password" name="password" placeholder="請輸入密碼" autocomplete="off" required>
+            </div>
+            <button type="submit">登入</button>
+        </form>
+
+        <div class="footer-hint">
+            示範帳號：<code>admin</code> / <code>password123</code><br>
+            帳號欄位存在 SQL 注入漏洞，試試看利用它！
+        </div>
+    </div>
+</body>
+</html>
